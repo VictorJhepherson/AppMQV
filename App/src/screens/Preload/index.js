@@ -14,15 +14,17 @@ export default () => {
     useEffect(()=>{
         const checkToken = async () => {
             const token = await AsyncStorage.getItem('token');
+            const user = await AsyncStorage.getItem('user');
             if(token) {
-                let json = await Api.checkToken(token);
+                let json = await Api.checkToken(token, user);
+                const data = JSON.stringify(json);
                 if(json.token) {
                     await AsyncStorage.setItem('token', json.token);
 
                     userDispatch({
                         type: 'setAvatar',
                         payload: {
-                            avatar: json.data.USR_PHOTO
+                            avatar: data.USR_PHOTO
                         }
                     });
 

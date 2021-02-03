@@ -28,8 +28,7 @@ export const CustomButtonText = styled.Text`
 export const SignMessageButton = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
-    margin-top: 50px;
-    margin-bottom: 20px;
+    width: 100%;
 `;
 export const SignMessageButtonText = styled.Text`
     font-size: 16px;
@@ -40,4 +39,35 @@ export const SignMessageButtonTextBold = styled.Text`
     color: #FFFFFF;
     font-weight: bold;
     margin-left: 5px;
+`;
+
+export const Scroller = styled.ScrollView`
+    flex: 1;
+    padding: 10px;
+`;
+
+export const SingInputText = styled.Text`
+    flex 1;
+    font-size: 16px;
+    color: #ffffff;
+    margin-left: 10px;
+    justify-content: center;
+`;
+
+export const ButtonImage = styled.TouchableOpacity`
+    width: 100%;
+    height: 60px;
+    background-color: #FFFFFF;
+    flex-direction: row;
+    border-radius: 30px;
+    padding-left: 15px;
+    align-items: center;
+    margin-bottom: 15px;
+`;
+export const ButtonImageText = styled.Text`
+    flex: 1;
+    font-size: 16px;
+    color: #000000;
+    margin-left: 10px;
+    justify-content: center;
 `;
