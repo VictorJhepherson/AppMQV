@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { UserContext } from '../../contexts/UserContext';
 import { Picker } from '@react-native-community/picker';
 import TextInputMaskArea from '../../components/TextInputMaskedArea';
-import { ImagePicker } from 'react-native-image-picker';
 
 import Api from '../../Api';
 
@@ -54,7 +53,6 @@ export default () => {
     const [cpfField, setCPFField] = useState('');
     const [rgField, setRGField] = useState('');
     const [ageField, setAgeField] = useState('');
-    const [image, setImage] = useState();
     const [selectedValueChurchs, setSelectedChurchs] = useState([
         { CHURCH_ID: 0, CHURCH_DESC: 'Selecione uma opção*' }
     ]);
@@ -77,7 +75,7 @@ export default () => {
         if(nameField != '' && ageField != '' && emailField != '' && passwordField != '' && selectedValueChurchs != 0 
             && cpfField != '' && rgField != '' && streetField != '' && neighborhoodField != '' && numberhouseField != ''
                 && cityField != '' && selectedValue != 0) {
-            let json = await Api.signUp(nameField, image, ageField, telField, selectedValueChurchs, cpfField, rgField, streetField, 
+            let json = await Api.signUp(nameField, ageField, telField, selectedValueChurchs, cpfField, rgField, streetField, 
                                             neighborhoodField, numberhouseField, complementField, cityField, selectedValue,
                                                 emailField, passwordField);
             if(json.token) {
@@ -130,22 +128,6 @@ export default () => {
             alert("Erro: "+ res.error);
         }
     };
-
-    const imagePickerCallback = (data) => {
-        if(data.didCancel){
-            return;
-        }
-
-        if(data.error){
-            return;
-        }
-
-        if(!data.uri){
-            return;
-        }
-
-        setImage(data);
-    } 
 
     useEffect(() => {
         getChurchs();
@@ -303,9 +285,6 @@ export default () => {
 						<Picker.Item value='Sergipe' label='Sergipe' style={styles.PickerComponent}/>
 						<Picker.Item value='Tocantins' label='Tocantins' style={styles.PickerComponent} />
                     </Picker>
-                    <ButtonImage onPress={() => ImagePicker.showImagePicker({}, imagePickerCallback)}>
-                        <ButtonImageText>Escolher Imagem</ButtonImageText>
-                    </ButtonImage>
                     <CustomButton onPress={handleSignClick}>
                         <CustomButtonText>CADASTRAR</CustomButtonText>
                     </CustomButton>
