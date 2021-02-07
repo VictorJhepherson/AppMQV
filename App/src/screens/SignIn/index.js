@@ -22,14 +22,14 @@ export default () => {
     const handleSignClick = async () => {
         if(emailField != '' && passwordField != '') {
             let json = await Api.signIn(emailField, passwordField); 
+            console.log(json);
             if(json.token)  {
                 await AsyncStorage.setItem('token', json.token);
-                const data = JSON.stringify(json.data);
-                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('user', json.data.USR_ID.toString());
                 userDispatch({
                     type: 'setAvatar',
                     payload: {
-                        avatar: data.USR_PHOTO
+                        avatar: json.data.USR_PHOTO
                     }
                 });
                 navigation.reset({

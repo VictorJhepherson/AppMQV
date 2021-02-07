@@ -30,7 +30,7 @@ export default {
     },
     signUp: async (USR_NAME, USR_PHOTO, USR_DATEBIRTHDAY, USR_PHONENUMBER, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, 
                     STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, TYPEHOUSE, CITY, STATE, SU_LOGINNAME, SU_PASSWORD) => {
-        const req = await fetch(`${BASE_API}/users`, {
+        const req = await fetch(`${BASE_API}/users/register`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -44,13 +44,15 @@ export default {
         return json;
     },
     signOut: async () => {
+        const token = await AsyncStorage.getItem('token');
         const req = await fetch(`${BASE_API}/login/logout`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 "Authorization": 'Baerer ' + token
-            }
+            },
+            body: JSON.stringify({token})
         });
         const json = await req.json();
 
@@ -82,6 +84,20 @@ export default {
             headers: {
                 "Authorization": 'Baerer ' + token
             }
+        });
+        const json = await req.json();
+        return json;
+    },
+    getUserProfile: async (USR_ID) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/users/getUserProfile`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({USR_ID})
         });
         const json = await req.json();
         return json;

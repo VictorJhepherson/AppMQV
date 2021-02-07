@@ -24,7 +24,7 @@ export default () => {
             height: 60,
             backgroundColor: "#FFFFFF",
             flexDirection: "row",
-            borderRadius: 3000,
+            borderRadius: 30,
             paddingLeft: 15,
             alignItems: "center",
             marginBottom: 15
