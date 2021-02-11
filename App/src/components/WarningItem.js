@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Area = styled.TouchableOpacity`
     background-color: #FFFFFF;
@@ -42,8 +43,18 @@ const SeeWarningButtonText = styled.Text`
 `;
 
 export default ({data}) => {
+    const navigation = useNavigation();
+
+    const handleClick = () => {
+        navigation.navigate('Warning', {
+            WARNING_ID: data.WARNING_ID,
+            WARNING_TITLE: data.WARNING_TITLE,
+            WARNING_DATE: data.WARNING_DATE
+        });
+    };
+
     return (
-        <Area>
+        <Area onPress={handleClick}>
             <InfoArea>
                 <WarningTitle>{data.WARNING_TITLE}</WarningTitle>
                 <WarningDate>{data.WARNING_DATE}</WarningDate>

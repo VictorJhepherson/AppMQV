@@ -101,5 +101,19 @@ export default {
         });
         const json = await req.json();
         return json;
+    },
+    getWarning: async (WARNING_ID) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/warning/warningId`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({WARNING_ID})
+        });
+        const json = await req.json();
+        return json;
     }
 };
