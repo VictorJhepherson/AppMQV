@@ -32,7 +32,7 @@ export default () => {
             </HeaderArea>
             <Scroller>
                 {loading && 
-                    <LoadingIcon size="large" color="#000000"/>
+                    <LoadingIcon size="large" color="#FFFFFF"/>
                 }
                 <ListArea>
                     {list.map((item, k) => (

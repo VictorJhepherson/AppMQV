@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 
 const Area = styled.TouchableOpacity`
-    background-color: #000000;
+    background-color: #FFFFFF;
     margin-bottom: 20px;
     border-radius: 20px;
     padding: 15px;
@@ -17,20 +17,20 @@ const InfoArea = styled.View`
 const WarningTitle = styled.Text`
     font-size: 17px;
     font-weight: bold;
-    color: #FFF;
+    color: #000000;
 `;
 
 const WarningDate = styled.Text`
     font-size: 17px;
     font-weight: bold;
-    color: #FFF;
+    color: #000000;
     margin-bottom: 10px;
 `;
 
 const SeeWarningButton = styled.View`
     width: 86px;
     height: 26px;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #000000;
     border-radius: 10px;
     justify-content: center;
     align-items: center; 
@@ -38,7 +38,7 @@ const SeeWarningButton = styled.View`
 
 const SeeWarningButtonText = styled.Text`
     font-size: 13px;
-    color: #FFFFFF;
+    color: #000000;
 `;
 
 export default ({data}) => {

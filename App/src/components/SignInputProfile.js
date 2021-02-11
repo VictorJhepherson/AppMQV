@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 const InputArea = styled.View`
     width: 100%;
     height: 60px;
-    background-color: #000000;
+    background-color: #FFFFFF;
     flex-direction: row;
     border-radius: 30px;
     padding-left: 15px;
@@ -15,8 +15,7 @@ const InputArea = styled.View`
 const Input = styled.TextInput`
     flex: 1;
     font-size: 16px;
-    color: #FFFFFF;
-    margin-left: 10px;
+    color: #000000;
 `;
 
 export default ({value, onChangeText, editable}) => {

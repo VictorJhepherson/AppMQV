@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
     flex: 1;
-    background-color: #FFFFFF;
+    background-color: #000000;
 `;
 
 export const Scroller = styled.ScrollView`
@@ -12,22 +12,22 @@ export const Scroller = styled.ScrollView`
 `;
 
 export const HeaderArea = styled.View`
-    height: 60px;
-    flex-direction: row-reverse;
-    background-color: #000000;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    height: 60px;
 `;
 
 export const HeaderTitle = styled.Text`
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: #FFF;
+    margin-left: 10px;
 `;
 
 export const ListArea = styled.View`
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 `;
 
 export const LoadingIcon = styled.ActivityIndicator`

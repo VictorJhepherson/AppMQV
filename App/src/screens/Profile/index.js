@@ -1,10 +1,13 @@
 import React, { useEffect, useState, setState } from 'react';
-import { Container, SignMessageButton, SignMessageButtonText, Scroller, InputArea, HeaderArea, HeaderTitle } from './styles';
+import { Container, SignMessageButton, SignMessageButtonText, UserImage, InputArea, HeaderArea, EditButton, HeaderTitle, ConfigButton } from './styles';
 import { useNavigation } from '@react-navigation/native';
 import SignInputProfile from '../../components/SignInputProfile';
 
 import Api from '../../Api';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import EditIcon from '../../assets/edit.svg';
+import ConfigIcon from '../../assets/config.svg';
 
 export default () => {
     const navigation = useNavigation();
@@ -13,21 +16,12 @@ export default () => {
         permission: false
     };
 
-    let visibleComplement = true;
     const [nomeField, setNomeField] = useState('');
-    const [dateNascField, setDateNascField] = useState('');
+    const [photoField, setPhotoField] = useState('');
     const [telField, setTelField] = useState('');
-    const [churchField, setChurchField] = useState('');
-    const [cpfField, setCPFField] = useState('');
-    const [rgField, setRGField] = useState('');
     const [emailField, setEmailField] = useState('');
-    const [streetField, setStreetField] = useState('');
-    const [neighborhoodField, setNeighborhoodField] = useState('');
-    const [numberHouseField, setNumberHouseField] = useState('');
-    const [typeHouseField, setTypeHouseField] = useState('');
-    const [complementField, setComplementField] = useState('');
-    const [cityField, setCityField] = useState('');
-    const [stateField, setStateField] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [userType, setUserType] = useState(0);
 
     const handleMessageButtonClick = async () => {
         let json = await Api.signOut();
@@ -39,47 +33,58 @@ export default () => {
         }
     };
 
+    const handleMessageButtonClickEdit = () => {
+
+    };
+
+    const handleMessageButtonClickConfig = () => {
+
+    };
+
     const getUserProfile = async () => {
         const user = await AsyncStorage.getItem('user');
         let json = await Api.getUserProfile(user);
-        const key = 0;
         if(json.length < 1){
             alert(json.error);
         } else {
             json.data.map((item, k) => {
                 setNomeField(item.USR_NAME);
-                setDateNascField(item.USR_DATEBIRTHDAY);
-                setTelField(item.USR_PHONENUMBER);
-                setChurchField(item.CHURCH_DESC);
-                setCPFField(item.USRDOC_CPFNUMBER);
-                setRGField(item.USRDOC_RGNUMBER);
-                setEmailField(item.SU_LOGINNAME);
-                setStreetField(item.STREET);
-                setNeighborhoodField(item.NEIGHBORHOOD);
-                setNumberHouseField(item.NUMBER_HOUSE.toString());
-                setTypeHouseField(item.TYPEHOUSE_DESC);
-                if(item.COMPLEMENT == null){
-                    visibleComplement = false;
-                } else {
-                    setComplementField(item.COMPLEMENT);
+                var i = 0;
+                var firstName = '';
+                var OlaByName = '';
+                while(item.USR_NAME[i] != ' ')
+                {
+                    firstName += item.USR_NAME[i];
+                    i++;
                 }
-                setCityField(item.CITY);
-                setStateField(item.STATE);
+                OlaByName += 'Olá, ' + firstName;
+                setFirstName(OlaByName);
+                if(item.USR_PHOTO != '' || item.USR_PHOTO != null)
+                    setPhotoField(item.USR_PHOTO);
+                setEmailField(item.SU_LOGINNAME);
+                setUserType(item.USRTYPE);
+                var ddd = '';
+                var dv = '';
+                var telNumber1 = '';
+                var telNumber2 = '';
+                var PHONENUMBER = '';
+                for(var i = 0; i < item.USR_PHONENUMBER.length; i++)
+                {
+                    if(i <= 1)
+                        ddd += item.USR_PHONENUMBER[i];
+                    else if(i == 2)
+                        dv += item.USR_PHONENUMBER[i];
+                    else if(i >= 3 && i <= 6)
+                        telNumber1 += item.USR_PHONENUMBER[i];
+                    else 
+                        telNumber2 += item.USR_PHONENUMBER[i];
+
+                }
+                PHONENUMBER += '(' + ddd + ')' + ' ' + dv + telNumber1 + '-' + telNumber2;
+                setTelField(PHONENUMBER);
             });
         }
     };
-    
-    let Complement = [];
-    if(visibleComplement){
-        Complement.push(
-            <SignInputProfile
-                value={complementField}
-                onChangeText={t=>setComplementField(t)}
-                editable={this.state.permission}
-                key={0}
-            />
-        );
-    }
 
     useEffect(() => {
         getUserProfile();
@@ -88,81 +93,40 @@ export default () => {
     return (
         <Container>
             <HeaderArea>
-                <HeaderTitle>PERFIL</HeaderTitle>
+                <HeaderTitle>{firstName}</HeaderTitle>
+                <EditButton onPress={handleMessageButtonClickEdit}>
+                    <EditIcon width="26" height="26" fill="#FFFFFF"/>
+                </EditButton>
+                {userType == 1 && 
+                    <ConfigButton onPress={handleMessageButtonClickConfig}>
+                        <ConfigIcon width="26" height="26" fill="#FFFFFF"/>
+                    </ConfigButton>
+                }
             </HeaderArea>
-            <Scroller>
-                <InputArea>
-                    <SignInputProfile
-                        value={nomeField}
-                        onChangeText={t=>setNomeField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={dateNascField}
-                        onChangeText={t=>setDateNascField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={telField}
-                        onChangeText={t=>setTelField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={churchField}
-                        onChangeText={t=>setChurchField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile 
-                        value={cpfField}
-                        onChangeText={t=>setCPFField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={rgField}
-                        onChangeText={t=>setRGField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={emailField}
-                        onChangeText={t=>setEmailField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={streetField}
-                        onChangeText={t=>setStreetField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={neighborhoodField}
-                        onChangeText={t=>setNeighborhoodField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={numberHouseField}
-                        onChangeText={t=>setNumberHouseField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={typeHouseField}
-                        onChangeText={t=>setTypeHouseField(t)}
-                        editable={this.state.permission}
-                    />
-                    {Complement}
-                    <SignInputProfile
-                        value={cityField}
-                        onChangeText={t=>setCityField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignInputProfile
-                        value={stateField}
-                        onChangeText={t=>setStateField(t)}
-                        editable={this.state.permission}
-                    />
-                    <SignMessageButton onPress={handleMessageButtonClick}>
-                        <SignMessageButtonText>Sair</SignMessageButtonText>
-                    </SignMessageButton>
-                </InputArea>
-            </Scroller>
+            <UserImage
+                source={{
+                    uri: photoField
+                        ? photoField
+                        : 'https://st2.depositphotos.com/4111759/12123/v/950/depositphotos_121233262-stock-illustration-male-default-placeholder-avatar-profile.jpg' 
+                }}
+            />
+            <InputArea>
+                <SignInputProfile
+                    value={nomeField}
+                    editable={this.state.permission}
+                />
+                <SignInputProfile
+                    value={telField}
+                    editable={this.state.permission}
+                />
+                <SignInputProfile
+                    value={emailField}
+                    editable={this.state.permission}
+                />
+                <SignMessageButton onPress={handleMessageButtonClick}>
+                    <SignMessageButtonText>Sair</SignMessageButtonText>
+                </SignMessageButton>
+            </InputArea>
         </Container>
     );
 };
