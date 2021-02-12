@@ -2,6 +2,7 @@ import React, { useEffect, useState, setState } from 'react';
 import { Container, SignMessageButton, SignMessageButtonText, UserImage, InputArea, HeaderArea, EditButton, HeaderTitle, ConfigButton } from './styles';
 import { useNavigation } from '@react-navigation/native';
 import SignInputProfile from '../../components/SignInputProfile';
+import SecretaryModal from '../../components/SecretaryModal';
 
 import Api from '../../Api';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -22,6 +23,7 @@ export default () => {
     const [emailField, setEmailField] = useState('');
     const [firstName, setFirstName] = useState('');
     const [userType, setUserType] = useState(0);
+    const [secretaryModal, setSecretaryModal] = useState(false);
 
     const handleMessageButtonClick = async () => {
         let json = await Api.signOut();
@@ -37,8 +39,8 @@ export default () => {
 
     };
 
-    const handleMessageButtonClickConfig = () => {
-
+    const handleMessageButtonClickSecretary = () => {
+        setSecretaryModal(true);
     };
 
     const getUserProfile = async () => {
@@ -98,7 +100,7 @@ export default () => {
                     <EditIcon width="26" height="26" fill="#FFFFFF"/>
                 </EditButton>
                 {userType == 1 && 
-                    <ConfigButton onPress={handleMessageButtonClickConfig}>
+                    <ConfigButton onPress={handleMessageButtonClickSecretary}>
                         <ConfigIcon width="26" height="26" fill="#FFFFFF"/>
                     </ConfigButton>
                 }
@@ -127,6 +129,11 @@ export default () => {
                     <SignMessageButtonText>Sair</SignMessageButtonText>
                 </SignMessageButton>
             </InputArea>
+
+            <SecretaryModal 
+                show={secretaryModal}
+                setShow={setSecretaryModal}
+            />
         </Container>
     );
 };

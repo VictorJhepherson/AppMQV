@@ -16,6 +16,7 @@ const Input = styled.TextInput`
     flex: 1;
     font-size: 16px;
     color: #000000;
+    margin-left: 10px;
 `;
 
 export default ({value, onChangeText, editable}) => {
