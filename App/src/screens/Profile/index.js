@@ -90,7 +90,7 @@ export default () => {
 
     useEffect(() => {
         getUserProfile();
-    });
+    }, []);
 
     return (
         <Container>

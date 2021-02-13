@@ -116,22 +116,8 @@ export default () => {
         }
     };
 
-    const getTypeHouse = async () => {
-        let res = await Api.getTypeHouse();
-        if(res.data != null) {
-            let json = [...selectedValueTypeHouse, { TYPEHOUSE_ID: res.data[0].TYPEHOUSE_ID, TYPEHOUSE_DESC: res.data[0].TYPEHOUSE_DESC }];
-            for(var i = 1; i < res.data.length; i++){
-                json.push([{ TYPEHOUSE_ID: res.data[i].TYPEHOUSE_ID, TYPEHOUSE_DESC: res.data[i].TYPEHOUSE_DESC }]);
-            }
-            setListTypeHouse(json);
-        } else {
-            alert("Erro: "+ res.error);
-        }
-    };
-
     useEffect(() => {
         getChurchs();
-        getTypeHouse();
     }, []);
 
     return (
@@ -160,7 +146,6 @@ export default () => {
                         password={true}
                     />
                     <TextInputMaskArea
-                        IconSvg={LockIcon} 
                         type={'cel-phone'}
                         options={{
                             maskType: 'BRL',
@@ -174,7 +159,6 @@ export default () => {
                         onChangeText={t=>setTelField(t)}
                     />
                     <TextInputMaskArea
-                        IconSvg={LockIcon} 
                         type={'datetime'}
                         options={{
                             format: 'DD/MM/YYYY'
@@ -195,7 +179,6 @@ export default () => {
                         })}
                     </Picker>
                     <TextInputMaskArea
-                        IconSvg={LockIcon} 
                         type={'cpf'}
                         value={cpfField}
                         placeholder="Digite seu CPF*"
@@ -204,7 +187,6 @@ export default () => {
                         onChangeText={t=>setCPFField(t)}
                     />
                      <TextInputMaskArea
-                        IconSvg={LockIcon} 
                         type={'only-numbers'}
                         value={rgField}
                         maxLength={9}
@@ -242,9 +224,8 @@ export default () => {
                         selectedValue={selectedValueTypeHouse}                     
                         onValueChange={(itemValue, itemIndex) => setSelectedTypeHouse(itemValue)}
                     >
-                        {listTypeHouse.map((item, k) => {
-                                return (<Picker.Item key={k} value={item.TYPEHOUSE_ID} label={item.TYPEHOUSE_DESC} style={styles.PickerComponent} />)
-                        })}
+                        <Picker.Item value='1' label='Casa' style={styles.PickerComponent} />
+                        <Picker.Item value='2'label='Apartamento' style={styles.PickerComponent} />
                     </Picker>
                     <SignInput 
                         IconSvg={LockIcon} 

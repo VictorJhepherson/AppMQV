@@ -78,16 +78,6 @@ export default {
         const json = await req.json();
         return json;
     },
-    getTypeHouse: async () => {
-        const token = await AsyncStorage.getItem('token');
-        const req = await fetch(`${BASE_API}/dropDown/combo-typehouse`, {
-            headers: {
-                "Authorization": 'Baerer ' + token
-            }
-        });
-        const json = await req.json();
-        return json;
-    },
     getUserProfile: async (USR_ID) => {
         const token = await AsyncStorage.getItem('token');
         const req = await fetch(`${BASE_API}/users/getUserProfile`, {

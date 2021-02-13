@@ -22,10 +22,16 @@ export default () => {
         USR_PHOTO: route.params.USR_PHOTO
     });
 
+    const [userStatus, setUserStatus] = useState('');
+
     const [numberHouse, setNumberHouse] = useState('');
 
     const handleMessageButtonClickEdit = () => {
-
+        navigation.navigate('EditUser', {
+            USR_ID: userInfo.USR_ID,
+            USR_NAME: userInfo.USR_NAME,
+            USR_PHOTO: userInfo.USR_PHOTO
+        });
     };
 
     const getUserProfile = async () => {
@@ -36,13 +42,17 @@ export default () => {
             json.data.map((item, k) => {
                 setUsernfo(item);
                 setNumberHouse(item.NUMBER_HOUSE.toString());
+                if(item.USR_STATUS == 'A')
+                    setUserStatus('Ativo');
+                else 
+                    setUserStatus('Inativo');
             });
         }
     };
 
     useEffect(() => {
         getUserProfile();
-    });
+    }, []);
 
     return (
         <Container>
@@ -67,6 +77,10 @@ export default () => {
                     />
                     <SignInputProfile
                         value={userInfo.USR_PHONENUMBER}
+                        editable={this.state.permission}
+                    />
+                    <SignInputProfile
+                        value={userStatus}
                         editable={this.state.permission}
                     />
                     <SignInputProfile
