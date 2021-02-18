@@ -25,6 +25,8 @@ export default () => {
     const [userType, setUserType] = useState(0);
     const [secretaryModal, setSecretaryModal] = useState(false);
 
+    const [userInfo, setUsernfo] = useState();
+
     const handleMessageButtonClick = async () => {
         let json = await Api.signOut();
         if(json.token == null){
@@ -36,7 +38,19 @@ export default () => {
     };
 
     const handleMessageButtonClickEdit = () => {
-
+        navigation.navigate('EditProfile', {
+            USR_ID: userInfo.USR_ID,
+            USR_NAME: userInfo.USR_NAME,
+            USR_PHOTO: userInfo.USR_PHOTO,
+            CHURCH_ID: userInfo.CHURCH_ID,
+            CHURCH_DESC: userInfo.CHURCH_DESC,
+            TYPEHOUSE_ID: userInfo.TYPEHOUSE_ID,
+            TYPEHOUSE_DESC: userInfo.TYPEHOUSE_DESC,
+            STATES_ID: userInfo.STATES_ID,
+            STATES_DESC: userInfo.STATES_DESC,
+            USRTYPE: userInfo.USRTYPE,
+            USRTYPE_DESC: userInfo.USRTYPE_DESC
+        });
     };
 
     const handleMessageButtonClickSecretary = () => {
@@ -50,6 +64,7 @@ export default () => {
             alert(json.error);
         } else {
             json.data.map((item, k) => {
+                setUsernfo(item);
                 setNomeField(item.USR_NAME);
                 var i = 0;
                 var firstName = '';

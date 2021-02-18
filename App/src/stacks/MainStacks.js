@@ -9,6 +9,7 @@ import Warning from '../screens/Warning';
 import Youngs from '../screens/Youngs';
 import UserDetail from '../screens/UserDetail';
 import EditUser from '../screens/EditUser';
+import EditProfile from '../screens/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -27,5 +28,6 @@ export default () => (
         <Stack.Screen name="Youngs" component={Youngs} />
         <Stack.Screen name="UserDetail" component={UserDetail} />
         <Stack.Screen name="EditUser" component={EditUser} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
 );
