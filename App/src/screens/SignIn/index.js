@@ -8,7 +8,7 @@ import Api from '../../Api';
 
 import SignInput from '../../components/SignInput'
 
-import MQVLogo from '../../assets/barber.svg';
+import MQVLogo from '../../assets/MQVLogo.svg';
 import EmailIcon from '../../assets/email.svg';
 import LockIcon from '../../assets/lock.svg';
 

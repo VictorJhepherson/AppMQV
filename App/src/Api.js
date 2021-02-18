@@ -68,12 +68,58 @@ export default {
         const json = await req.json();
         return json;
     },
-    getChurchs: async () => {
+    getChurchs: async (CHURCH_DESC) => {
         const token = await AsyncStorage.getItem('token');
         const req = await fetch(`${BASE_API}/dropDown/combo-churchs`, {
+            method: 'POST',
             headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
                 "Authorization": 'Baerer ' + token
-            }
+            },
+            body: JSON.stringify({CHURCH_DESC})
+        });
+        const json = await req.json();
+        return json;
+    },
+    getTypeHouse: async (TYPEHOUSE_DESC) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/dropDown/combo-typehouse`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({TYPEHOUSE_DESC})
+        });
+        const json = await req.json();
+        return json;
+    },
+    getStates: async (STATES_DESC) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/dropDown/combo-states`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({STATES_DESC})
+        });
+        const json = await req.json();
+        return json;
+    },
+    getUserType: async (USRTYPE) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/dropDown/combo-usertype`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({USRTYPE})
         });
         const json = await req.json();
         return json;
@@ -128,6 +174,23 @@ export default {
             }
         });
         const json = await req.json();
+        return json;
+    },
+    updateUser: async (USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, SU_LOGINNAME,
+        STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE_ID, P_USRID_REGUSER) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/users`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, 
+                SU_LOGINNAME, STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE_ID, P_USRID_REGUSER})
+        });
+        const json = await req.json();
+        console.log(json);
         return json;
     }
 };

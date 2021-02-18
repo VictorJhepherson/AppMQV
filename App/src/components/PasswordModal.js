@@ -3,7 +3,8 @@ import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
 import ExpandIcon from '../assets/expand.svg';
-import MQVLogo from '../assets/MQVLogo.svg';
+//import SignInput from 'SignInput';
+//import LockIcon from '../../assets/lock.svg';
 
 const Modal = styled.Modal`
     
@@ -17,13 +18,10 @@ const ModalArea = styled.View`
 
 const ModalBody = styled.View`
     background-color: #000000;
-    min-height: 1000px;
-    max-height: 1000px;
-    min-width: 300px;
-    max-width: 300px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    min-height: 300px;
     padding: 10px 20px 40px 20px;
-    position: absolute;
-    right: 0;
 `;
 
 const CloseButton = styled.TouchableOpacity`
@@ -54,20 +52,14 @@ export const InputArea = styled.View`
 export default ({show, setShow}) => {
     const navigation = useNavigation();
 
+    const [passwordField, setpasswordField] = useState('');
+    const [passwordNewField, setpasswordNewField] = useState('');
+
     const handleCloseButton = () => {
         setShow(false);
     };
 
-    const handleMessageButtonClickYoung = () => {
-        setShow(false);
-        navigation.navigate('Youngs');
-    };
-
-    const handleMessageButtonClickNews = () => {
-
-    };
-
-    const handleMessageButtonClickSchedule = () => {
+    const handleMessageButtonClick = async () => {
 
     };
 
@@ -83,17 +75,10 @@ export default ({show, setShow}) => {
                         <ExpandIcon width="40" height="40" fill="#FFFFFF"/>
                     </CloseButton>
                     <InputArea>
-                        <SignMessageButton onPress={handleMessageButtonClickYoung}>
-                            <SignMessageButtonText>Jovens</SignMessageButtonText>
-                        </SignMessageButton>
-                        <SignMessageButton onPress={handleMessageButtonClickNews}>
-                            <SignMessageButtonText>Notícias</SignMessageButtonText>
-                        </SignMessageButton>
-                        <SignMessageButton onPress={handleMessageButtonClickSchedule}>
-                            <SignMessageButtonText>Agenda</SignMessageButtonText>
-                        </SignMessageButton>
 
-                        <MQVLogo width="100%" height="330"/>
+                        <SignMessageButton onPress={handleMessageButtonClick}>
+                            <SignMessageButtonText>Alterar senha</SignMessageButtonText>
+                        </SignMessageButton>
                     </InputArea>
                 </ModalBody>
             </ModalArea>

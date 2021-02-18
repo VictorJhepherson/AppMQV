@@ -12,6 +12,7 @@ export const UserImage = styled.Image`
     width: 50%;
     height: 25%;
     margin-left: 100px;
+    margin-top: 25px;
 `;
 
 export const InputArea = styled.View`
@@ -56,9 +57,21 @@ export const CustomButtonImage = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    margin-top: 15px;
 `;
 
 export const CustomButtonImageText = styled.Text`
     font-size: 16px;
     color: #FFFFFF;
+`;
+
+export const PickerArea = styled.View`
+    width: 100%;
+    height: 60px;
+    background-color: #FFFFFF;
+    flex-direction: row;
+    border-radius: 30px;
+    padding-left: 15px;
+    align-items: center;
+    margin-bottom: 15px;
 `;

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Container, UserImage, InputArea, Scroller, CustomButton, CustomButtonText, CustomButtonImage, CustomButtonImageText } from './styles';
+import { Container, UserImage, InputArea, Scroller, CustomButton, CustomButtonText, CustomButtonImage, CustomButtonImageText, PickerArea } from './styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import InputUserEdit from '../../components/InputUserEdit';
 import { Picker } from '@react-native-community/picker';
 import TextInputMaskedArea from '../../components/TextInputMaskedArea';
+import PasswordModal from '../../components/PasswordModal';
 
 import Api from '../../Api';
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default () => {
     const navigation = useNavigation();
@@ -14,14 +16,12 @@ export default () => {
 
     const styles = StyleSheet.create({
         Picker: {
-            width: 300,
-            height: 60,
+            width: 280,
+            height: 35,
             backgroundColor: "#FFFFFF",
             flexDirection: "row",
-            borderRadius: 30,
             paddingLeft: 15,
             alignItems: "center",
-            marginBottom: 15
         },
         PickerComponent: {
             flex: 1,
@@ -40,7 +40,15 @@ export default () => {
     const [userInfo, setUserInfo] = useState({
         USR_ID: route.params.USR_ID,
         USR_NAME: route.params.USR_NAME,
-        USR_PHOTO: route.params.USR_PHOTO
+        USR_PHOTO: route.params.USR_PHOTO,
+        CHURCH_ID: route.params.CHURCH_ID,
+        CHURCH_DESC: route.params.CHURCH_DESC,
+        TYPEHOUSE_ID: route.params.TYPEHOUSE_ID,
+        TYPEHOUSE_DESC: route.params.TYPEHOUSE_DESC,
+        STATES_ID: route.params.STATES_ID,
+        STATES_DESC: route.params.STATES_DESC,
+        USRTYPE: route.params.USRTYPE,
+        USRTYPE_DESC: route.params.USRTYPE_DESC
     });
 
     const [numberHouse, setNumberHouse] = useState('');
@@ -48,10 +56,7 @@ export default () => {
     const [userStatus2, setUserStatus2] = useState('');
     const [userStatusValue, setUserStatusValue] = useState('');
     const [churchId, setChurchId] = useState('');
-    const [state, setState] = useState('');
-    const [typeHouse, setTypeHouse] = useState('');
-    const [typeHouse2, setTypeHouse2] = useState('');
-    const [typeHouseValue, setTypeHouseValue] = useState('');
+    const [typeHouseId, setTypeHouseId] = useState('');
 
     const [nameField, setNameField] = useState('');
     const [dateField, setDateField] = useState('');
@@ -59,7 +64,10 @@ export default () => {
     const [userStatusField, setUserStatusField] = useState('');
     const [userType, setUserType] = useState('');
 
+    const [listStates, setListStates] = useState([]);
+    const [listTypeHouse, setListTypeHouse] = useState([]);
     const [listChurchs, setListChurchs] = useState([]);
+    const [listUserType, setListUserType] = useState([]);
     const [cpfField, setCPFField] = useState('');
     const [rgField, setRGField] = useState('');
     const [emailField, setEmailField] = useState('');
@@ -70,8 +78,8 @@ export default () => {
     const [complementField, setComplementField] = useState('');
     const [cityField, setCityField] = useState('');
     const [stateSelectedValue, setStateSelectedValue] = useState('');
-    const [typeHouseField, setTypeHouseField] = useState('');
 
+    const [passwordModal, setPasswordModal] = useState(false);
     const [passwordField, setpasswordField] = useState('');
 
     const getUserProfile = async () => {
@@ -82,8 +90,6 @@ export default () => {
             json.data.map((item, k) => {
                 setUserInfo(item);
                 setNumberHouse(item.NUMBER_HOUSE.toString());
-                setState(item.STATE);
-                setTypeHouse(item.TYPEHOUSE_DESC);
                 if(item.USR_STATUS == 'A') {
                     setUserStatus('Ativo');
                     setUserStatus2('Inativo');
@@ -93,22 +99,52 @@ export default () => {
                     setUserStatus2('Ativo');
                     setUserStatusValue('A');
                 }
-                if(item.TYPEHOUSE_DESC == 'Apartamento') {
-                    setTypeHouse2('Casa');
-                    setTypeHouseValue('1');
-                } else {
-                    setTypeHouse2('Apartamento');
-                    setTypeHouseValue('2');
-                }
             });
         }
     };
 
     const getChurchs = async () => {
-        let res = await Api.getChurchs();
+        let res = await Api.getChurchs(userInfo.CHURCH_DESC);
         if(res.data != null) {
             res.data.map((item, k) => {
-                setListChurchs(<Picker.Item key={k} value={item.CHURCH_ID.toString()} label={item.CHURCH_DESC} style={styles.PickerComponent} />)
+                if(item.length > 1){
+                    listChurchs.push(<Picker.Item key={k} value={item.CHURCH_ID.toString()} label={item.CHURCH_DESC} style={styles.PickerComponent} />);
+                } else {
+                    setListChurchs(<Picker.Item key={k} value={item.CHURCH_ID.toString()} label={item.CHURCH_DESC} style={styles.PickerComponent} />);
+                }
+            });
+        } else {
+            setListChurchs(<Picker.Item value={userInfo.CHURCH_ID} label={userInfo.CHURCH_DESC} style={styles.PickerComponent} />);
+        }
+    };
+
+    const getTypeHouse = async () => {
+        let res = await Api.getTypeHouse(userInfo.TYPEHOUSE_DESC);
+        if(res.data != null) {
+            res.data.map((item, k) => {
+                listTypeHouse.push(<Picker.Item key={k} value={item.TYPEHOUSE_ID.toString()} label={item.TYPEHOUSE_DESC} style={styles.PickerComponent} />);
+            });
+        } else {
+            alert("Erro: "+ res.error);
+        }
+    };
+
+    const getStates = async () => {
+        let res = await Api.getStates(userInfo.STATES_DESC);;
+        if(res.data != null) {
+            res.data.map((item, k) => {
+                listStates.push(<Picker.Item key={k} value={item.STATES_ID.toString()} label={item.STATES_DESC} style={styles.PickerComponent} />);
+            });
+        } else {
+            alert("Erro: "+ res.error);
+        }
+    };
+
+    const getUserType = async () => {
+        let res = await Api.getUserType(userInfo.USRTYPE);;
+        if(res.data != null) {
+            res.data.map((item, k) => {
+                listUserType.push(<Picker.Item key={k} value={item.USRTYPE.toString()} label={item.USRTYPE_DESC} style={styles.PickerComponent} />);
             });
         } else {
             alert("Erro: "+ res.error);
@@ -120,15 +156,27 @@ export default () => {
     }
 
     const handleClickSave = async () => {
-        navigation.reset({
-            routes: [{name: 'Youngs'}]
-        });
+        let usrIdRegUser = await AsyncStorage.getItem('user');
+        let json = await Api.updateUser(
+            userInfo.USR_ID, nameField, dateField, telField, userStatusField, userType, churchId, cpfField, rgField, emailField, streetField, 
+            neighborhoodField, numberhouseField, complementField, cityField, stateSelectedValue, typeHouseId, usrIdRegUser
+        );
+        if(json.error != null){
+            alert('Não foi possível efetuar a alteração no usuário, tente novamente');
+        } else {
+            navigation.reset({
+                routes: [{name: 'Youngs'}]
+            });
+        }
     };
 
     useEffect(() => {
         getUserProfile();
         getChurchs();
-    }, [], []);
+        getTypeHouse();
+        getStates();
+        getUserType();
+    }, [], [], [], [], []);
 
     return (
         <Container>
@@ -173,34 +221,50 @@ export default () => {
                         value={telField}
                         onChangeText={t=>setTelField(t)}
                     />
-                    <Picker
-                        style={styles.Picker}
-                        selectedValue={userStatusField}                     
-                        onValueChange={(itemValue, itemIndex) => setUserStatusField(itemValue)}
-                    >
-                        <Picker.Item value={userInfo.USR_STATUS} label={userStatus} style={styles.PickerComponent} />
-                        <Picker.Item value={userStatusValue} label={userStatus2} style={styles.PickerComponent} />
-                    </Picker>
-                    <InputUserEdit
-                        placeholder={userInfo.USRTYPE_DESC}
-                        value={userType}
-                        onChangeText={t=>setUserType(t)}
-                    />
-                    <Picker 
-                        style={styles.Picker}
-                        selectedValue={churchId}                     
-                        onValueChange={(itemValue, itemIndex) => setChurchId(itemValue)}
-                    >                       
-                        {listChurchs}
-                    </Picker>
-                    <InputUserEdit
-                        placeholder={userInfo.USRDOC_CPFNUMBER}
+                    <PickerArea>
+                        <Picker
+                            style={styles.Picker}
+                            selectedValue={userStatusField}                     
+                            onValueChange={(itemValue, itemIndex) => setUserStatusField(itemValue)}
+                        >
+                            <Picker.Item value={userInfo.USR_STATUS} label={userStatus} style={styles.PickerComponent} />
+                            <Picker.Item value={userStatusValue} label={userStatus2} style={styles.PickerComponent} />
+                        </Picker>
+                    </PickerArea>
+                    <PickerArea>
+                        <Picker 
+                            style={styles.Picker}
+                            selectedValue={userType}                     
+                            onValueChange={(itemValue, itemIndex) => setUserType(itemValue)}
+                        >        
+                            <Picker.Item value={userInfo.USRTYPE} label={userInfo.USRTYPE_DESC} style={styles.PickerComponent} />               
+                            {listUserType}
+                        </Picker>
+                    </PickerArea>
+                    <PickerArea>
+                        <Picker 
+                            style={styles.Picker}
+                            selectedValue={churchId}                     
+                            onValueChange={(itemValue, itemIndex) => setChurchId(itemValue)}
+                        >        
+                            <Picker.Item value={userInfo.CHURCH_ID} label={userInfo.CHURCH_DESC} style={styles.PickerComponent} />               
+                        </Picker>
+                    </PickerArea>
+                    <TextInputMaskedArea
+                        type={'cpf'}
                         value={cpfField}
+                        placeholder={userInfo.USRDOC_CPFNUMBER}
+                        placeholderTextColor="#000000"
+                        style={styles.TextMasked}
                         onChangeText={t=>setCPFField(t)}
                     />
-                    <InputUserEdit
-                        placeholder={userInfo.USRDOC_RGNUMBER}
+                     <TextInputMaskedArea
+                        type={'only-numbers'}
                         value={rgField}
+                        maxLength={9}
+                        placeholder={userInfo.USRDOC_RGNUMBER}
+                        placeholderTextColor="#000000"
+                        style={styles.TextMasked}
                         onChangeText={t=>setRGField(t)}
                     />
                     <InputUserEdit
@@ -233,48 +297,26 @@ export default () => {
                         value={cityField}
                         onChangeText={t=>setCityField(t)}
                     />
-                    <Picker
-                        style={styles.Picker}
-                        selectedValue={stateSelectedValue}                     
-                        onValueChange={(itemValue, itemIndex) => setStateSelectedValue(itemValue)}
-                    >
-                        <Picker.Item value={state} label={state} style={styles.PickerComponent} />
-                        <Picker.Item value='Acre' label='Acre' style={styles.PickerComponent} />
-                        <Picker.Item value='Alagoas' label='Alagoas' style={styles.PickerComponent} />
-                        <Picker.Item value='Amapá' label='Amapá' style={styles.PickerComponent} />
-                        <Picker.Item value='Amazonas' label='Amazonas' style={styles.PickerComponent} />
-                        <Picker.Item value='Bahia' label='Bahia' style={styles.PickerComponent} />
-						<Picker.Item value='Ceará' label='Ceará' style={styles.PickerComponent}/>
-						<Picker.Item value='Distrito Federal' label='Distrito Federal' style={styles.PickerComponent}/>
-						<Picker.Item value='Espírito Santo' label='Espírito Santo' style={styles.PickerComponent}/>
-						<Picker.Item value='Goiás' label='Goiás' style={styles.PickerComponent}/>
-						<Picker.Item value='Maranhão' label='Maranhão' style={styles.PickerComponent}/>
-						<Picker.Item value='Mato Grosso' label='Mato Grosso' style={styles.PickerComponent}/>
-						<Picker.Item value='Mato Grosso do Sul' label='Mato Grosso do Sul' style={styles.PickerComponent}/>
-						<Picker.Item value='Minas Gerais' label='Minas Gerais' style={styles.PickerComponent}/>
-						<Picker.Item value='Pará' label='Pará' style={styles.PickerComponent}/>
-						<Picker.Item value='Paraíba' label='Paraíba' style={styles.PickerComponent}/>
-						<Picker.Item value='Pernambuco' label='Pernambuco' style={styles.PickerComponent}/>
-						<Picker.Item value='Piauí' label='Piauí' style={styles.PickerComponent}/>
-						<Picker.Item value='Rio de Janeiro' label='Rio de Janeiro' style={styles.PickerComponent}/>
-						<Picker.Item value='Rio Grande do Norte' label='Rio Grande do Norte' style={styles.PickerComponent}/>
-						<Picker.Item value='Rio Grande do Sul' label='Rio Grande do Sul' style={styles.PickerComponent}/>
-						<Picker.Item value='Rondônia' label='Rondônia' style={styles.PickerComponent}/>
-						<Picker.Item value='Roraima' label='Roraima' style={styles.PickerComponent}/>
-						<Picker.Item value='Santa Catarina' label='Santa Catarina' style={styles.PickerComponent}/>
-						<Picker.Item value='São Paulo' label='São Paulo' style={styles.PickerComponent}/>
-						<Picker.Item value='Sergipe' label='Sergipe' style={styles.PickerComponent}/>
-						<Picker.Item value='Tocantins' label='Tocantins' style={styles.PickerComponent} />
-                    </Picker>
-                    <Picker
-                        style={styles.Picker}
-                        selectedValue={typeHouseField}                     
-                        onValueChange={(itemValue, itemIndex) => setTypeHouseField(itemValue)}
-                    >
-                        <Picker.Item value={userInfo.TYPEHOUSE_DESC} label={typeHouse} style={styles.PickerComponent} />
-                        <Picker.Item value={typeHouseValue} label={typeHouse2} style={styles.PickerComponent} />
-                    </Picker>
-
+                    <PickerArea>
+                        <Picker
+                            style={styles.Picker}
+                            selectedValue={stateSelectedValue}                     
+                            onValueChange={(itemValue, itemIndex) => setStateSelectedValue(itemValue)}
+                        >
+                            <Picker.Item value={userInfo.STATES_ID} label={userInfo.STATES_DESC} style={styles.PickerComponent} />
+                            {listStates}
+                        </Picker>
+                    </PickerArea>
+                    <PickerArea>
+                        <Picker 
+                            style={styles.Picker}
+                            selectedValue={typeHouseId}                     
+                            onValueChange={(itemValue, itemIndex) => setTypeHouseId(itemValue)}
+                        >             
+                            <Picker.Item value={userInfo.TYPEHOUSE_ID} label={userInfo.TYPEHOUSE_DESC} style={styles.PickerComponent} />          
+                            {listTypeHouse}
+                        </Picker>
+                    </PickerArea>
                     <CustomButton onPress={handleClickSave}>
                         <CustomButtonText>SALVAR</CustomButtonText>
                     </CustomButton>

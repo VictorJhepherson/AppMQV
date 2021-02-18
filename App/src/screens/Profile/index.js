@@ -65,25 +65,7 @@ export default () => {
                     setPhotoField(item.USR_PHOTO);
                 setEmailField(item.SU_LOGINNAME);
                 setUserType(item.USRTYPE);
-                var ddd = '';
-                var dv = '';
-                var telNumber1 = '';
-                var telNumber2 = '';
-                var PHONENUMBER = '';
-                for(var i = 0; i < item.USR_PHONENUMBER.length; i++)
-                {
-                    if(i <= 1)
-                        ddd += item.USR_PHONENUMBER[i];
-                    else if(i == 2)
-                        dv += item.USR_PHONENUMBER[i];
-                    else if(i >= 3 && i <= 6)
-                        telNumber1 += item.USR_PHONENUMBER[i];
-                    else 
-                        telNumber2 += item.USR_PHONENUMBER[i];
-
-                }
-                PHONENUMBER += '(' + ddd + ')' + ' ' + dv + telNumber1 + '-' + telNumber2;
-                setTelField(PHONENUMBER);
+                setTelField(item.USR_PHONENUMBER);
             });
         }
     };

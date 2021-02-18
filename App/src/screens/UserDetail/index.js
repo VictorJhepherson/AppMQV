@@ -30,7 +30,15 @@ export default () => {
         navigation.navigate('EditUser', {
             USR_ID: userInfo.USR_ID,
             USR_NAME: userInfo.USR_NAME,
-            USR_PHOTO: userInfo.USR_PHOTO
+            USR_PHOTO: userInfo.USR_PHOTO,
+            CHURCH_ID: userInfo.CHURCH_ID,
+            CHURCH_DESC: userInfo.CHURCH_DESC,
+            TYPEHOUSE_ID: userInfo.TYPEHOUSE_ID,
+            TYPEHOUSE_DESC: userInfo.TYPEHOUSE_DESC,
+            STATES_ID: userInfo.STATES_ID,
+            STATES_DESC: userInfo.STATES_DESC,
+            USRTYPE: userInfo.USRTYPE,
+            USRTYPE_DESC: userInfo.USRTYPE_DESC
         });
     };
 
@@ -124,7 +132,7 @@ export default () => {
                         editable={this.state.permission}
                     />
                     <SignInputProfile
-                        value={userInfo.STATE}
+                        value={userInfo.STATES_DESC}
                         editable={this.state.permission}
                     />
                     <SignInputProfile

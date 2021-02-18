@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Api from "../../Api";
 import { UserContext } from '../../contexts/UserContext';
 
-import MQVLogo from '../../assets/barber.svg';
+import MQVLogo from '../../assets/MQVLogo.svg';
 
 export default () => {
     const { dispatch: userDispatch } = useContext(UserContext);
