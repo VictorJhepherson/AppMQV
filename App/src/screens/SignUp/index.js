@@ -81,7 +81,7 @@ export default () => {
             if(json.token) {
                 await AsyncStorage.setItem('token', json.token);
                 const data = JSON.stringify(json);
-                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('user', json.data.USR_ID.toString());
 
                 userDispatch({
                     type: 'setAvatar',

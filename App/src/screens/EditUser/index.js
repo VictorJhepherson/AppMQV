@@ -51,36 +51,42 @@ export default () => {
         USRTYPE_DESC: route.params.USRTYPE_DESC
     });
 
+    var i = 0;
+    var rgFormated = '';
+    var um = '';
+    var dois = '';
+    var tres = '';
+    var dv = '';
+
     const [numberHouse, setNumberHouse] = useState('');
     const [userStatus, setUserStatus] = useState('');
     const [userStatus2, setUserStatus2] = useState('');
-    const [userStatusValue, setUserStatusValue] = useState('');
-    const [churchId, setChurchId] = useState('');
-    const [typeHouseId, setTypeHouseId] = useState('');
+    const [userStatusValue, setUserStatusValue] = useState(null);
+    const [churchId, setChurchId] = useState(null);
+    const [typeHouseId, setTypeHouseId] = useState(null);
 
-    const [nameField, setNameField] = useState('');
-    const [dateField, setDateField] = useState('');
-    const [telField, setTelField] = useState('');
-    const [userStatusField, setUserStatusField] = useState('');
-    const [userType, setUserType] = useState('');
+    const [nameField, setNameField] = useState(null);
+    const [dateField, setDateField] = useState(null);
+    const [telField, setTelField] = useState(null);
+    const [userStatusField, setUserStatusField] = useState(null);
+    const [userType, setUserType] = useState(null);
 
     const [listStates, setListStates] = useState([]);
     const [listTypeHouse, setListTypeHouse] = useState([]);
     const [listChurchs, setListChurchs] = useState([]);
     const [listUserType, setListUserType] = useState([]);
-    const [cpfField, setCPFField] = useState('');
-    const [rgField, setRGField] = useState('');
-    const [emailField, setEmailField] = useState('');
+    const [cpfField, setCPFField] = useState(null);
+    const [rgField, setRGField] = useState(null);
+    const [emailField, setEmailField] = useState(null);
 
-    const [streetField, setStreetField] = useState('');
-    const [neighborhoodField, setNeighborhoodField] = useState('');
-    const [numberhouseField, setNumberhouseField] = useState('');
-    const [complementField, setComplementField] = useState('');
-    const [cityField, setCityField] = useState('');
-    const [stateSelectedValue, setStateSelectedValue] = useState('');
+    const [streetField, setStreetField] = useState(null);
+    const [neighborhoodField, setNeighborhoodField] = useState(null);
+    const [numberhouseField, setNumberhouseField] = useState(null);
+    const [complementField, setComplementField] = useState(null);
+    const [cityField, setCityField] = useState(null);
+    const [stateSelectedValue, setStateSelectedValue] = useState(null);
 
     const [passwordModal, setPasswordModal] = useState(false);
-    const [passwordField, setpasswordField] = useState('');
 
     const getUserProfile = async () => {
         let json = await Api.getUserProfile(userInfo.USR_ID);
@@ -153,20 +159,63 @@ export default () => {
 
     const handleButtonImage = async () => {
 
-    }
+    };
+
+    const handleClickPass = () => {
+        setPasswordModal(true);
+    };
 
     const handleClickSave = async () => {
         let usrIdRegUser = await AsyncStorage.getItem('user');
-        let json = await Api.updateUser(
-            userInfo.USR_ID, nameField, dateField, telField, userStatusField, userType, churchId, cpfField, rgField, emailField, streetField, 
-            neighborhoodField, numberhouseField, complementField, cityField, stateSelectedValue, typeHouseId, usrIdRegUser
-        );
-        if(json.error != null){
-            alert('Não foi possível efetuar a alteração no usuário, tente novamente');
+        if(rgField != null && rgField != ''){
+            while(i < rgField.length){
+                if(i < 2)
+                    um += rgField[i];
+                else if(i >= 2 && i <= 4)
+                    dois += rgField[i];
+                else if(i >= 5 && i <= 7)
+                    tres += rgField[i];
+                else if(i == 8){
+                    dv += rgField[i];
+                }
+    
+                i++;
+            }
+            rgFormated += um + '.' + dois + '.' + tres + '-' + dv;
+
+            if(userInfo.USR_ID == '' || usrIdRegUser == '')
+                alert('Não foi possível efetuar a alteração no usuário, faça o logout e login e depois tente novamente');
+            else {
+                let json = await Api.updateUser(
+                    userInfo.USR_ID, nameField, dateField, telField, userStatusField, userType, churchId, cpfField, rgFormated, emailField, streetField, 
+                    neighborhoodField, numberhouseField, complementField, cityField, stateSelectedValue, typeHouseId, usrIdRegUser
+                );
+
+                if(json.error != null){
+                    alert('Não foi possível efetuar a alteração no usuário, tente novamente');
+                } else {
+                    navigation.reset({
+                        routes: [{name: 'Youngs'}]
+                    });
+                }
+            }
         } else {
-            navigation.reset({
-                routes: [{name: 'Youngs'}]
-            });
+            if(userInfo.USR_ID == '' || usrIdRegUser == '')
+                alert('Não foi possível efetuar a alteração no usuário, faça o login novamente e depois tente novamente');
+            else {
+                let json = await Api.updateUser(
+                    userInfo.USR_ID, nameField, dateField, telField, userStatusField, userType, churchId, cpfField, rgField, emailField, streetField, 
+                    neighborhoodField, numberhouseField, complementField, cityField, stateSelectedValue, typeHouseId, usrIdRegUser
+                );
+
+                if(json.error != null){
+                    alert('Não foi possível efetuar a alteração no usuário, tente novamente ou contate o administrador');
+                } else {
+                    navigation.reset({
+                        routes: [{name: 'Youngs'}]
+                    });
+                }
+            }
         }
     };
 
@@ -317,11 +366,20 @@ export default () => {
                             {listTypeHouse}
                         </Picker>
                     </PickerArea>
+                    <CustomButton onPress={handleClickPass}>
+                        <CustomButtonText>Alterar senha</CustomButtonText>
+                    </CustomButton>
                     <CustomButton onPress={handleClickSave}>
-                        <CustomButtonText>SALVAR</CustomButtonText>
+                        <CustomButtonText>Salvar</CustomButtonText>
                     </CustomButton>
                 </InputArea>
             </Scroller>
+
+            <PasswordModal 
+                show={passwordModal}
+                setShow={setPasswordModal}
+                value={userInfo.USR_ID}
+            />
         </Container>
     );
 };

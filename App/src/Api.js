@@ -176,8 +176,7 @@ export default {
         const json = await req.json();
         return json;
     },
-    updateUser: async (USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, SU_LOGINNAME,
-        STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE_ID, P_USRID_REGUSER) => {
+    updateUser: async (USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, SU_LOGINNAME, STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE, P_USRID_REGUSER) => {
         const token = await AsyncStorage.getItem('token');
         const req = await fetch(`${BASE_API}/users`, {
             method: 'PATCH',
@@ -186,11 +185,23 @@ export default {
                 'Content-Type': 'application/json',
                 "Authorization": 'Baerer ' + token
             },
-            body: JSON.stringify({USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, 
-                SU_LOGINNAME, STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE_ID, P_USRID_REGUSER})
+            body: JSON.stringify({USR_ID, USR_NAME, USR_DATEBIRTHDAY, USR_PHONENUMBER, USR_STATUS, USRTYPE, CHURCH_ID, USRDOC_CPFNUMBER, USRDOC_RGNUMBER, SU_LOGINNAME, STREET, NEIGHBORHOOD, NUMBER_HOUSE, COMPLEMENT, CITY, STATE, TYPEHOUSE, P_USRID_REGUSER})
         });
         const json = await req.json();
-        console.log(json);
+        return json;
+    },
+    updatePass: async (SU_PASSWORD, USR_ID) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/users/password`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({SU_PASSWORD, USR_ID})
+        });
+        const json = await req.json();
         return json;
     }
 };
