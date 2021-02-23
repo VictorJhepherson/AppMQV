@@ -1,10 +1,10 @@
-import React, { useEffect, useState, setState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, UserImage, InputArea, HeaderArea, EditButton, HeaderTitle, Scroller } from './styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SignInputProfile from '../../components/SignInputProfile';
 
 import Api from '../../Api';
-import AsyncStorage from '@react-native-community/async-storage';
+
 
 import EditIcon from '../../assets/edit.svg';
 

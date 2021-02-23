@@ -6,6 +6,7 @@ import InputUserEdit from '../../components/InputUserEdit';
 import { Picker } from '@react-native-community/picker';
 import TextInputMaskedArea from '../../components/TextInputMaskedArea';
 import PasswordModal from '../../components/PasswordModal';
+import PhotoModal from '../../components/PhotoModal';
 
 import Api from '../../Api';
 import AsyncStorage from "@react-native-community/async-storage";
@@ -87,6 +88,7 @@ export default () => {
     const [stateSelectedValue, setStateSelectedValue] = useState(null);
 
     const [passwordModal, setPasswordModal] = useState(false);
+    const [photoModal, setPhotoModal] = useState(false);
 
     const getUserProfile = async () => {
         let json = await Api.getUserProfile(userInfo.USR_ID);
@@ -157,8 +159,8 @@ export default () => {
         }
     };
 
-    const handleButtonImage = async () => {
-
+    const handleClickEdit = () => {
+        setPhotoModal(true);
     };
 
     const handleClickPass = () => {
@@ -236,7 +238,7 @@ export default () => {
                         : 'https://st2.depositphotos.com/4111759/12123/v/950/depositphotos_121233262-stock-illustration-male-default-placeholder-avatar-profile.jpg' 
                 }}
             />
-            <CustomButtonImage onPress={handleButtonImage}>
+            <CustomButtonImage onPress={handleClickEdit}>
                 <CustomButtonImageText>Alterar foto do perfil</CustomButtonImageText>
             </CustomButtonImage>
             <Scroller>
@@ -378,6 +380,11 @@ export default () => {
             <PasswordModal 
                 show={passwordModal}
                 setShow={setPasswordModal}
+                value={userInfo.USR_ID}
+            />
+            <PhotoModal 
+                show={photoModal}
+                setShow={setPhotoModal}
                 value={userInfo.USR_ID}
             />
         </Container>

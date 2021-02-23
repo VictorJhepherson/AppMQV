@@ -203,5 +203,19 @@ export default {
         });
         const json = await req.json();
         return json;
+    },
+    updatePhoto: async (data) => {
+        const token = await AsyncStorage.getItem('token');
+        const req = await fetch(`${BASE_API}/users/photo`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Baerer ' + token
+            },
+            body: JSON.stringify({ data })
+        });
+        const json = await req.json();
+        return json;
     }
 };

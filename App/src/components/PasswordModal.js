@@ -87,9 +87,6 @@ export default ({show, setShow, value}) => {
                 alert('Não foi possível efetuar a alteração da senha, tente novamente ou contate o administrador');
             } else {
                 setShow(false);
-                navigation.reset({
-                    routes: [{name: 'Youngs'}]
-                });
             }
         }
     };
