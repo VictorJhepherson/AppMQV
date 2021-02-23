@@ -31,7 +31,9 @@ export default () => {
         let json = await Api.signOut();
         if(json.token == null){
             await AsyncStorage.setItem('token', '');
-            navigation.navigate('SignIn');
+            navigation.reset({
+                routes: [{name: 'SignIn'}]
+            });
         } else {
             alert('Não foi possível fazer Logout!');
         }

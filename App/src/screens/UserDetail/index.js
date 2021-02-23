@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Container, UserImage, InputArea, HeaderArea, EditButton, HeaderTitle, Scroller } from './styles';
+import { Linking } from 'react-native';
+import { Container, UserImage, InputArea, HeaderArea, EditButton, HeaderTitle, Scroller, SocialArea, SocialButton } from './styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SignInputProfile from '../../components/SignInputProfile';
 
@@ -7,6 +8,10 @@ import Api from '../../Api';
 
 
 import EditIcon from '../../assets/edit.svg';
+import WhatsApp from '../../assets/whatsapp.svg';
+import Facebook from '../../assets/facebook.svg';
+import Instagram from '../../assets/instagram.svg';
+
 
 export default () => {
     const navigation = useNavigation();
@@ -58,6 +63,50 @@ export default () => {
         }
     };
 
+    const ButtonWhatsApp = () => {
+        var i = 0;
+        var number = '';
+        while(i < userInfo.USR_PHONENUMBER.length) {
+            if(i >= 1 && i <= 2)
+                number += userInfo.USR_PHONENUMBER[i];
+            else if(i >= 5 && i <= 9)
+                number += userInfo.USR_PHONENUMBER[i];
+            else if(i >= 11 && i <= 14)
+                number += userInfo.USR_PHONENUMBER[i];
+            else if(i == 14)
+                break;
+            i++;
+        }
+
+        Linking.canOpenURL('whatsapp://send?text=Olá, tudo bem').then(supported => {
+            if(supported) {
+                return Linking.openURL('whatsapp://send?text=Olá, tudo bem?&phone=+55' + number);
+            } else {
+                alert('Não há WhatsApp instalado no seu celular');
+            }
+        })
+    ;}
+
+    const ButtonFacebook = () => {
+        Linking.canOpenURL('fb://profile/VictorJhepherson').then(supported => {
+            if(supported) {
+                return Linking.openURL('fb://profile?profile=' + userInfo.USR_FACEBOOK)
+            } else {
+                alert('Não há Facebook instalado no seu celular');
+            }
+        })
+    };    
+
+    const ButtonInstagram = () => {
+        Linking.canOpenURL('instagram://user?username=sr_tito08').then(supported => {
+            if(supported) {
+                return Linking.openURL('instagram://user?username=' + userInfo.USR_INSTAGRAM)
+            } else {
+                alert('Não há Instagram instalado no seu celular');
+            }
+        })
+    };
+
     useEffect(() => {
         getUserProfile();
     }, []);
@@ -79,6 +128,17 @@ export default () => {
             />
             <Scroller>
                 <InputArea>
+                    <SocialArea>
+                        <SocialButton onPress={ButtonWhatsApp}>
+                            <WhatsApp width="26" height="26" fill="#FFFFFF"/>
+                        </SocialButton>
+                        <SocialButton onPress={ButtonFacebook}>
+                            <Facebook width="26" height="26" fill="#FFFFFF"/>
+                        </SocialButton>
+                        <SocialButton onPress={ButtonInstagram}>
+                            <Instagram width="26" height="26" fill="#FFFFFF"/>
+                        </SocialButton>
+                    </SocialArea>
                     <SignInputProfile
                         value={userInfo.USR_DATEBIRTHDAY}
                         editable={this.state.permission}

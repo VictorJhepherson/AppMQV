@@ -44,3 +44,22 @@ export const Scroller = styled.ScrollView`
     flex: 1;
     padding: 10px;
 `;
+
+export const SocialArea = styled.View`
+    width: 100%;
+    height: 60px;
+    background-color: #000000;
+    flex-direction: row;
+    border-radius: 30px;
+    padding-left: 15px;
+    align-items: center;
+    margin-bottom: 15px;
+    justify-content: center;
+`;
+
+export const SocialButton = styled.TouchableOpacity`
+    width: 26px;
+    height: 26px;
+    margin-left: 15px;
+    margin-right: 15px;
+`;

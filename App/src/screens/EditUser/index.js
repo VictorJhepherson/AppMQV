@@ -85,6 +85,8 @@ export default () => {
     const [numberhouseField, setNumberhouseField] = useState(null);
     const [complementField, setComplementField] = useState(null);
     const [cityField, setCityField] = useState(null);
+    const [instagramField, setInstagramField] = useState(null);
+    const [facebookField, setFacebookField] = useState(null);
     const [stateSelectedValue, setStateSelectedValue] = useState(null);
 
     const [passwordModal, setPasswordModal] = useState(false);
@@ -206,7 +208,7 @@ export default () => {
                 alert('Não foi possível efetuar a alteração no usuário, faça o login novamente e depois tente novamente');
             else {
                 let json = await Api.updateUser(
-                    userInfo.USR_ID, nameField, dateField, telField, userStatusField, userType, churchId, cpfField, rgField, emailField, streetField, 
+                    userInfo.USR_ID, nameField, dateField, telField, userStatusField, instagramField, facebookField, userType, churchId, cpfField, rgField, emailField, streetField, 
                     neighborhoodField, numberhouseField, complementField, cityField, stateSelectedValue, typeHouseId, usrIdRegUser
                 );
 
@@ -368,6 +370,16 @@ export default () => {
                             {listTypeHouse}
                         </Picker>
                     </PickerArea>
+                    <InputUserEdit
+                        placeholder={userInfo.USR_INSTAGRAM}
+                        value={instagramField}
+                        onChangeText={t=>setInstagramField(t)}
+                    />
+                     <InputUserEdit
+                        placeholder={userInfo.USR_FACEBOOK}
+                        value={facebookField}
+                        onChangeText={t=>setFacebookField(t)}
+                    />
                     <CustomButton onPress={handleClickPass}>
                         <CustomButtonText>Alterar senha</CustomButtonText>
                     </CustomButton>
